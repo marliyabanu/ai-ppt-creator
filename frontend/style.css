@@ -1,0 +1,468 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #000000;
+    color: #000000;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 32px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+    position: relative;
+    min-height: 600px;
+}
+
+.page {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.page.active {
+    display: block;
+}
+
+.content-wrapper {
+    padding: 60px 80px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Logo */
+.logo {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.logo svg {
+    margin-bottom: 20px;
+}
+
+.logo h1 {
+    font-size: 24px;
+    letter-spacing: 4px;
+    font-weight: 800;
+}
+
+/* Typography */
+h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* Input Group */
+.input-group {
+    margin-bottom: 30px;
+}
+
+textarea {
+    width: 100%;
+    padding: 20px;
+    border: 2px solid #000000;
+    border-radius: 16px;
+    font-size: 16px;
+    font-family: 'Inter', monospace;
+    resize: vertical;
+    transition: all 0.3s ease;
+    background: #ffffff;
+}
+
+textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+}
+
+/* Buttons */
+.btn-primary, .btn-secondary {
+    position: relative;
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+}
+
+.btn-primary {
+    background: #000000;
+    color: #ffffff;
+    border-radius: 40px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #000000;
+    border: 2px solid #000000;
+    border-radius: 40px;
+}
+
+.btn-secondary:hover {
+    background: #000000;
+    color: #ffffff;
+}
+
+.btn-overlay {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-primary:hover .btn-overlay {
+    left: 100%;
+}
+
+/* Examples */
+.examples {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.example-tags {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.example-tag {
+    padding: 8px 16px;
+    background: #f5f5f5;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.example-tag:hover {
+    background: #000000;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Progress Indicator */
+.progress-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+.step {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #999;
+}
+
+.step.active {
+    background: #000000;
+    color: #ffffff;
+}
+
+.step-line {
+    width: 80px;
+    height: 2px;
+    background: #e0e0e0;
+    margin: 0 10px;
+}
+
+/* Config Section */
+.config-section {
+    margin-bottom: 40px;
+}
+
+.config-section label {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.slide-counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 10px;
+}
+
+.slide-counter span {
+    font-size: 48px;
+    font-weight: 800;
+    min-width: 80px;
+    text-align: center;
+}
+
+.counter-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #000000;
+    background: transparent;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.counter-btn:hover {
+    background: #000000;
+    color: #ffffff;
+}
+
+.hint {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Style Grid */
+.style-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.style-card {
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.style-card:hover {
+    transform: translateY(-5px);
+    border-color: #000000;
+}
+
+.style-card.selected {
+    border-color: #000000;
+    background: #fafafa;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.style-preview {
+    height: 100px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+}
+
+.style-preview.professional {
+    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+    border: 1px solid #000;
+}
+
+.style-preview.modern {
+    background: linear-gradient(135deg, #f5f5f5 0%, #cccccc 100%);
+}
+
+.style-preview.minimal {
+    background: #ffffff;
+    border: 2px solid #000;
+}
+
+.style-preview.bold {
+    background: #000000;
+}
+
+.style-card h4 {
+    margin-bottom: 8px;
+    font-size: 18px;
+}
+
+.style-card p {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Button Group */
+.button-group {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+/* Generation Status */
+.status-icon {
+    font-size: 60px;
+    text-align: center;
+    margin-bottom: 20px;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loader {
+    width: 60px;
+    height: 60px;
+    margin: 30px auto;
+    border: 3px solid #e0e0e0;
+    border-top: 3px solid #000000;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #000000;
+    width: 0%;
+    transition: width 0.3s ease;
+    animation: progress 3s ease forwards;
+}
+
+@keyframes progress {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+.status-message {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-top: 15px;
+}
+
+/* Success Section */
+.success-icon {
+    font-size: 80px;
+    text-align: center;
+    margin-bottom: 20px;
+    animation: bounce 0.5s ease;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+.presentation-info {
+    background: #f5f5f5;
+    padding: 20px;
+    border-radius: 16px;
+    margin: 30px 0;
+    text-align: left;
+}
+
+.presentation-info h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .content-wrapper {
+        padding: 40px 30px;
+    }
+    
+    h2 {
+        font-size: 28px;
+    }
+    
+    .style-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .step-line {
+        width: 40px;
+    }
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}

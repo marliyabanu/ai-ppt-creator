@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPT CREATOR - Professional Presentation Maker</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Falling Animation */
+        .falling-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .falling-item {
+            position: absolute;
+            font-size: 28px;
+            animation: fallItem linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes fallItem {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        /* Bunny Character */
+        .bunny-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10;
+            cursor: pointer;
+            animation: bounceBunny 2s infinite;
+        }
+        
+        @keyframes bounceBunny {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .bunny { text-align: center; filter: drop-shadow(0 10px 20px rgba(255,255,255,0.2)); }
+        .bunny:hover { transform: scale(1.1); transition: transform 0.3s; }
+        
+        .bunny-speech {
+            position: absolute;
+            top: -50px;
+            left: -80px;
+            background: white;
+            color: black;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            white-space: nowrap;
+            animation: shake 0.5s infinite;
+            border: 2px solid black;
+        }
+        
+        .bunny-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 10px 8px 0 8px;
+            border-style: solid;
+            border-color: white transparent transparent transparent;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px); }
+            75% { transform: translateX(3px); }
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 25px 50px rgba(255,255,255,0.1);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            border: 1px solid #333;
+        }
+        
+        .header {
+            background: #000;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .header h1 { font-size: 38px; letter-spacing: 2px; }
+        .header p { font-size: 12px; opacity: 0.8; margin-top: 5px; }
+        
+        .page { display: none; padding: 30px; animation: fadeIn 0.5s ease; }
+        .page.active { display: block; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h2 { font-size: 24px; color: #000; margin-bottom: 20px; text-align: center; }
+        h3 { font-size: 18px; margin: 15px 0 10px 0; color: #333; }
+        
+        label { font-weight: bold; display: block; margin-top: 15px; margin-bottom: 5px; }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #000;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+        }
+        
+        .slide-editor {
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .slide-title { font-weight: bold; margin-bottom: 10px; color: #000; font-size: 16px; }
+        .slide-content { width: 100%; min-height: 100px; margin-bottom: 10px; }
+        
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary { background: #000; color: white; width: 100%; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .btn-secondary { background: #f0f0f0; color: #000; border: 1px solid #000; }
+        .btn-secondary:hover { background: #000; color: white; }
+        
+        .button-group { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+        
+        .progress { display: flex; justify-content: center; margin-bottom: 20px; }
+        .step { width: 35px; height: 35px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-weight: bold; margin: 0 5px; }
+        .step.active { background: #000; color: white; }
+        .step-line { width: 40px; height: 2px; background: #e0e0e0; margin: auto 5px; }
+        
+        .style-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 10px 0; }
+        .style-card { padding: 10px; border: 2px solid #ddd; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .style-card:hover { transform: translateY(-2px); border-color: #000; }
+        .style-card.selected { border-color: #000; background: #f5f5f5; }
+        
+        .loader { text-align: center; padding: 40px; }
+        .spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid #000; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .success { text-align: center; padding: 40px; }
+        .checkmark { font-size: 70px; margin-bottom: 20px; animation: bounce 0.5s ease; }
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        
+        .info-box { background: #f5f5f5; padding: 20px; border-radius: 15px; margin: 20px 0; text-align: left; }
+        
+        .shake-button { animation: shakeButton 0.5s ease-in-out infinite; }
+        @keyframes shakeButton { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        
+        .continue-btn { width: 100%; margin-top: 20px; animation: shakeButton 1s ease-in-out infinite; }
+        .continue-btn:hover { animation: none; }
+        
+        .scroll-area { max-height: 500px; overflow-y: auto; padding-right: 10px; }
+        .scroll-area::-webkit-scrollbar { width: 8px; }
+        .scroll-area::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .scroll-area::-webkit-scrollbar-thumb { background: #000; border-radius: 10px; }
+        
+        .slide-count { text-align: center; color: #666; margin-bottom: 15px; font-size: 14px; }
+        
+        @media (max-width: 768px) {
+            .page { padding: 20px; }
+            .bunny-container { transform: scale(0.8); bottom: 5px; right: 5px; }
+            .bunny-speech { font-size: 10px; left: -60px; top: -40px; white-space: nowrap; }
+            .style-grid { grid-template-columns: repeat(2,1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="falling-container" id="fallingContainer"></div>
+    
+    <div class="bunny-container">
+        <div class="bunny">
+            <div class="bunny-speech">🐰 Create Professional PPT! 🥕</div>
+            <svg width="100" height="100" viewBox="0 0 100 100">
+                <ellipse cx="50" cy="60" rx="22" ry="25" fill="#f5f5f5" stroke="#000" stroke-width="2"/>
+                <circle cx="50" cy="35" r="18" fill="#f5f5f5" stroke="#000" stroke-width="2"/>
+                <ellipse cx="38" cy="12" rx="6" ry="18" fill="#f5f5f5" stroke="#000" stroke-width="2"/>
+                <ellipse cx="62" cy="12" rx="6" ry="18" fill="#f5f5f5" stroke="#000" stroke-width="2"/>
+                <ellipse cx="38" cy="12" rx="3" ry="12" fill="#ddd"/>
+                <ellipse cx="62" cy="12" rx="3" ry="12" fill="#ddd"/>
+                <circle cx="43" cy="32" r="3" fill="#000"/>
+                <circle cx="57" cy="32" r="3" fill="#000"/>
+                <ellipse cx="50" cy="40" rx="3" ry="2" fill="#ddd"/>
+                <path d="M47 43 Q50 47 53 43" stroke="#000" stroke-width="1.5" fill="none"/>
+                <line x1="30" y1="38" x2="40" y2="40" stroke="#000" stroke-width="1"/>
+                <line x1="30" y1="42" x2="40" y2="42" stroke="#000" stroke-width="1"/>
+                <line x1="70" y1="38" x2="60" y2="40" stroke="#000" stroke-width="1"/>
+                <line x1="70" y1="42" x2="60" y2="42" stroke="#000" stroke-width="1"/>
+                <ellipse cx="35" cy="80" rx="6" ry="4" fill="#f5f5f5" stroke="#000" stroke-width="1"/>
+                <ellipse cx="65" cy="80" rx="6" ry="4" fill="#f5f5f5" stroke="#000" stroke-width="1"/>
+                <polygon points="68,70 75,90 61,90" fill="#ff6600" stroke="#000" stroke-width="1"/>
+            </svg>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🐰 PPT CREATOR 🥕</h1>
+            <p>Created by B. MARLIYA BANU</p>
+        </div>
+        
+        <!-- PAGE 1: Only Presentation Title -->
+        <div id="page1" class="page active">
+            <h2>✨ What presentation would you like to create?</h2>
+            <label>📖 Presentation Title</label>
+            <input type="text" id="pptTitle" placeholder="Enter your presentation title...">
+            <button class="btn-primary continue-btn" id="nextBtn1" onclick="goToPage2()">Continue →</button>
+        </div>
+        
+        <!-- PAGE 2: Slide Content (User enters their content for up to 15 slides) -->
+        <div id="page2" class="page">
+            <div class="progress">
+                <div class="step active">1</div><div class="step-line"></div>
+                <div class="step active">2</div><div class="step-line"></div>
+                <div class="step">3</div>
+            </div>
+            <h2>📝 Enter Your Slide Content</h2>
+            <div class="slide-count" id="slideCount">Slides: 1 / 15</div>
+            <div class="scroll-area" id="slidesContainer"></div>
+            <div class="button-group">
+                <button class="btn-secondary" onclick="goToPage1()">← Back</button>
+                <button class="btn-primary" onclick="goToPage3()">Continue →</button>
+            </div>
+        </div>
+        
+        <!-- PAGE 3: Creator Name + Theme Selection -->
+        <div id="page3" class="page">
+            <div class="progress">
+                <div class="step active">1</div><div class="step-line"></div>
+                <div class="step active">2</div><div class="step-line"></div>
+                <div class="step active">3</div>
+            </div>
+            <h2>🎨 Customize Your Presentation</h2>
+            
+            <label>👤 Your Name / Creator Name</label>
+            <input type="text" id="creatorName" placeholder="Enter your name..." value="B. MARLIYA BANU">
+            
+            <label>🎨 Choose Theme (Colors & Fonts)</label>
+            <div class="style-grid">
+                <div class="style-card selected" data-style="corporate" onclick="selectStyle('corporate')">💼 Corporate Blue</div>
+                <div class="style-card" data-style="modern" onclick="selectStyle('modern')">✨ Modern Purple</div>
+                <div class="style-card" data-style="minimal" onclick="selectStyle('minimal')">🎯 Minimal Teal</div>
+                <div class="style-card" data-style="bold" onclick="selectStyle('bold')">⚡ Bold Red</div>
+                <div class="style-card" data-style="elegant" onclick="selectStyle('elegant')">💜 Elegant Purple</div>
+                <div class="style-card" data-style="nature" onclick="selectStyle('nature')">🌿 Nature Green</div>
+                <div class="style-card" data-style="ocean" onclick="selectStyle('ocean')">🌊 Ocean Blue</div>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn-secondary" onclick="goToPage2()">← Back</button>
+                <button class="btn-primary" onclick="generatePPT()">Generate PPT →</button>
+            </div>
+        </div>
+        
+        <!-- PAGE 4: Result -->
+        <div id="page4" class="page">
+            <div class="progress">
+                <div class="step active">1</div><div class="step-line"></div>
+                <div class="step active">2</div><div class="step-line"></div>
+                <div class="step active">3</div>
+            </div>
+            <div id="loading" class="loader">
+                <div class="spinner"></div>
+                <h3>🐰 Creating Your Professional Presentation... 🥕</h3>
+                <p>Adding Roadmap, Mind Map, Features, and Comparison templates</p>
+            </div>
+            <div id="result" style="display: none;" class="success">
+                <div class="checkmark">🎉✨🌟</div>
+                <h2>Your Professional Presentation is Ready!</h2>
+                <div class="info-box" id="info"></div>
+                <button class="btn-primary" onclick="downloadPPT()" style="width:100%">📥 Download PPT</button>
+                <button class="btn-secondary" onclick="resetApp()" style="width:100%; margin-top:10px">Create Another →</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Create falling items
+        function createFallingItems() {
+            const container = document.getElementById('fallingContainer');
+            const items = ['🥕', '🥕', '🐰', '✨', '🌟', '💼', '📊', '🎨','❤️'];
+            for (let i = 0; i < 100; i++) {
+                const item = document.createElement('div');
+                item.className = 'falling-item';
+                item.innerHTML = items[Math.floor(Math.random() * items.length)];
+                item.style.left = Math.random() * 100 + '%';
+                item.style.animationDuration = Math.random() * 4 + 3 + 's';
+                item.style.animationDelay = Math.random() * 5 + 's';
+                item.style.fontSize = Math.random() * 25 + 20 + 'px';
+                container.appendChild(item);
+            }
+        }
+        createFallingItems();
+        
+        let currentStyle = 'corporate';
+        let slidesData = [];
+        
+        // Initialize 1 slide
+        function initSlides() {
+            slidesData = [{ title: "Introduction", content: ["Welcome to my presentation", "Key topics to be covered", "What you will learn"] }];
+            renderSlides();
+        }
+        
+        function renderSlides() {
+            const container = document.getElementById('slidesContainer');
+            container.innerHTML = '';
+            for (let i = 0; i < slidesData.length; i++) {
+                const slideDiv = document.createElement('div');
+                slideDiv.className = 'slide-editor';
+                slideDiv.innerHTML = `
+                    <div class="slide-title">📄 Slide ${i+1}: 
+                        <input type="text" id="slide_title_${i}" value="${slidesData[i].title}" style="width: 70%; display: inline-block; margin-left: 10px;">
+                        ${slidesData.length > 1 ? `<button onclick="removeSlide(${i})" style="float: right; background: #ff4444; color: white; padding: 5px 10px; font-size: 12px; border-radius: 10px;">✗ Remove</button>` : ''}
+                    </div>
+                    <textarea class="slide-content" id="slide_content_${i}" rows="4" placeholder="Enter bullet points (one per line)">${slidesData[i].content.join('\n')}</textarea>
+                `;
+                container.appendChild(slideDiv);
+            }
+            document.getElementById('slideCount').innerHTML = `Slides: ${slidesData.length} / 15`;
+            
+            if (slidesData.length < 15) {
+                const addBtn = document.createElement('button');
+                addBtn.innerHTML = '+ Add New Slide';
+                addBtn.style.width = '100%';
+                addBtn.style.padding = '12px';
+                addBtn.style.marginTop = '10px';
+                addBtn.style.background = '#000';
+                addBtn.style.color = 'white';
+                addBtn.style.border = 'none';
+                addBtn.style.borderRadius = '10px';
+                addBtn.style.cursor = 'pointer';
+                addBtn.onclick = () => addSlide();
+                container.appendChild(addBtn);
+            }
+        }
+        
+        function addSlide() {
+            if (slidesData.length < 15) {
+                slidesData.push({ title: `Slide ${slidesData.length + 1}`, content: ["Point 1", "Point 2", "Point 3"] });
+                renderSlides();
+            }
+        }
+        
+        function removeSlide(index) {
+            if (slidesData.length > 1) {
+                slidesData.splice(index, 1);
+                renderSlides();
+            }
+        }
+        
+        function saveSlides() {
+            for (let i = 0; i < slidesData.length; i++) {
+                const titleInput = document.getElementById(`slide_title_${i}`);
+                const contentText = document.getElementById(`slide_content_${i}`);
+                if (titleInput) slidesData[i].title = titleInput.value;
+                if (contentText) slidesData[i].content = contentText.value.split('\n').filter(line => line.trim().length > 0);
+                if (slidesData[i].content.length === 0) slidesData[i].content = ["Sample content"];
+            }
+        }
+        
+        function selectStyle(style) {
+            currentStyle = style;
+            document.querySelectorAll('.style-card').forEach(card => card.classList.remove('selected'));
+            document.querySelector(`.style-card[data-style="${style}"]`).classList.add('selected');
+        }
+        
+        function goToPage2() {
+            const title = document.getElementById('pptTitle').value.trim();
+            if (!title) { alert('🐰 Please enter a presentation title! 🥕'); return; }
+            document.getElementById('page1').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+        }
+        
+        function goToPage1() {
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('page1').classList.add('active');
+        }
+        
+        function goToPage3() {
+            saveSlides();
+            if (slidesData.length === 0) { alert('Please add at least one slide!'); return; }
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('page3').classList.add('active');
+        }
+        
+        function goToPage2From3() {
+            document.getElementById('page3').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+        }
+        
+        async function generatePPT() {
+            saveSlides();
+            const title = document.getElementById('pptTitle').value.trim();
+            const creator = document.getElementById('creatorName').value.trim() || "B. MARLIYA BANU";
+            
+            document.getElementById('page3').classList.remove('active');
+            document.getElementById('page4').classList.add('active');
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/generate-ppt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title: title,
+                        creator_name: creator,
+                        style: currentStyle,
+                        slides_content: slidesData
+                    })
+                });
+                const data = await response.json();
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('info').innerHTML = `
+                    <strong>📖 Title:</strong> ${title}<br>
+                    <strong>👤 Creator:</strong> ${creator}<br>
+                    <strong>📊 Slides:</strong> ${slidesData.length + 1}<br>
+                    <strong>🎨 Theme:</strong> ${currentStyle}<br>
+                    <strong>⏰ Created:</strong> ${new Date().toLocaleString()}
+                `;
+                window.downloadUrl = data.download_url;
+            } catch (error) {
+                alert('Error: ' + error.message);
+                resetApp();
+            }
+        }
+        
+        function downloadPPT() {
+            if (window.downloadUrl) window.open(window.downloadUrl, '_blank');
+        }
+        
+        function resetApp() {
+            document.getElementById('pptTitle').value = '';
+            document.getElementById('creatorName').value = 'B. MARLIYA BANU';
+            document.getElementById('page4').classList.remove('active');
+            document.getElementById('page1').classList.add('active');
+            initSlides();
+            window.downloadUrl = '';
+        }
+        
+        // Initialize
+        initSlides();
+        
+        // Shake animation for continue buttons
+        const nextBtn1 = document.getElementById('nextBtn1');
+        if (nextBtn1) {
+            setInterval(() => {
+                nextBtn1.classList.add('shake-button');
+                setTimeout(() => nextBtn1.classList.remove('shake-button'), 500);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
