@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PPT CREATOR - Professional Presentation Maker</title>
+    <title>PPT CREATOR</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -32,14 +32,20 @@
         
         .falling-item {
             position: absolute;
-            font-size: 28px;
+            font-size: 30px;
             animation: fallItem linear infinite;
             opacity: 0;
         }
         
         @keyframes fallItem {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
         }
         
         /* Bunny Character */
@@ -123,11 +129,9 @@
         }
         
         h2 { font-size: 24px; color: #000; margin-bottom: 20px; text-align: center; }
-        h3 { font-size: 18px; margin: 15px 0 10px 0; color: #333; }
-        
         label { font-weight: bold; display: block; margin-top: 15px; margin-bottom: 5px; }
         
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
@@ -137,7 +141,7 @@
             transition: all 0.3s;
         }
         
-        input:focus, textarea:focus {
+        input:focus, textarea:focus, select:focus {
             outline: none;
             border-color: #000;
             box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
@@ -151,8 +155,19 @@
             border: 1px solid #e0e0e0;
         }
         
-        .slide-title { font-weight: bold; margin-bottom: 10px; color: #000; font-size: 16px; }
-        .slide-content { width: 100%; min-height: 100px; margin-bottom: 10px; }
+        .slide-title-input {
+            font-weight: bold;
+            width: 70%;
+            padding: 8px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .slide-content-text {
+            width: 100%;
+            min-height: 120px;
+            padding: 10px;
+        }
         
         button {
             padding: 12px 25px;
@@ -203,6 +218,9 @@
         .scroll-area::-webkit-scrollbar-thumb { background: #000; border-radius: 10px; }
         
         .slide-count { text-align: center; color: #666; margin-bottom: 15px; font-size: 14px; }
+        .remove-btn { background: #ff4444; color: white; border: none; border-radius: 8px; padding: 5px 12px; cursor: pointer; float: right; font-size: 12px; }
+        .remove-btn:hover { background: #cc0000; }
+        .add-btn { background: #000; color: white; border: none; border-radius: 10px; padding: 12px; width: 100%; margin-top: 10px; cursor: pointer; font-weight: bold; }
         
         @media (max-width: 768px) {
             .page { padding: 20px; }
@@ -246,7 +264,7 @@
             <p>Created by B. MARLIYA BANU</p>
         </div>
         
-        <!-- PAGE 1: Only Presentation Title -->
+        <!-- PAGE 1: Presentation Title -->
         <div id="page1" class="page active">
             <h2>✨ What presentation would you like to create?</h2>
             <label>📖 Presentation Title</label>
@@ -254,35 +272,19 @@
             <button class="btn-primary continue-btn" id="nextBtn1" onclick="goToPage2()">Continue →</button>
         </div>
         
-        <!-- PAGE 2: Slide Content (User enters their content for up to 15 slides) -->
+        <!-- PAGE 2: Your Name + Style Theme -->
         <div id="page2" class="page">
             <div class="progress">
                 <div class="step active">1</div><div class="step-line"></div>
                 <div class="step active">2</div><div class="step-line"></div>
                 <div class="step">3</div>
             </div>
-            <h2>📝 Enter Your Slide Content</h2>
-            <div class="slide-count" id="slideCount">Slides: 1 / 15</div>
-            <div class="scroll-area" id="slidesContainer"></div>
-            <div class="button-group">
-                <button class="btn-secondary" onclick="goToPage1()">← Back</button>
-                <button class="btn-primary" onclick="goToPage3()">Continue →</button>
-            </div>
-        </div>
-        
-        <!-- PAGE 3: Creator Name + Theme Selection -->
-        <div id="page3" class="page">
-            <div class="progress">
-                <div class="step active">1</div><div class="step-line"></div>
-                <div class="step active">2</div><div class="step-line"></div>
-                <div class="step active">3</div>
-            </div>
-            <h2>🎨 Customize Your Presentation</h2>
+            <h2>🎨 Your Information & Style</h2>
             
-            <label>👤 Your Name / Creator Name</label>
+            <label>👤 Your Name</label>
             <input type="text" id="creatorName" placeholder="Enter your name..." value="B. MARLIYA BANU">
             
-            <label>🎨 Choose Theme (Colors & Fonts)</label>
+            <label>🎨 Choose Style Theme</label>
             <div class="style-grid">
                 <div class="style-card selected" data-style="corporate" onclick="selectStyle('corporate')">💼 Corporate Blue</div>
                 <div class="style-card" data-style="modern" onclick="selectStyle('modern')">✨ Modern Purple</div>
@@ -294,13 +296,84 @@
             </div>
             
             <div class="button-group">
+                <button class="btn-secondary" onclick="goToPage1()">← Back</button>
+                <button class="btn-primary" onclick="goToPage3()">Continue →</button>
+            </div>
+        </div>
+        
+        <!-- PAGE 3: Font + Background Settings -->
+        <div id="page3" class="page">
+            <div class="progress">
+                <div class="step active">1</div><div class="step-line"></div>
+                <div class="step active">2</div><div class="step-line"></div>
+                <div class="step active">3</div>
+            </div>
+            <h2>🎨 Font & Background Settings</h2>
+            
+            <label>🎨 Background Color</label>
+            <select id="bgColor">
+                <option value="white">⚪ White</option>
+                <option value="black">⚫ Black</option>
+                <option value="light_gray">◻️ Light Gray</option>
+                <option value="dark_gray">◼️ Dark Gray</option>
+                <option value="light_blue">💙 Light Blue</option>
+                <option value="dark_blue">🔵 Dark Blue</option>
+                <option value="light_green">💚 Light Green</option>
+                <option value="dark_green">🟢 Dark Green</option>
+                <option value="light_yellow">💛 Light Yellow</option>
+                <option value="light_purple">💜 Light Purple</option>
+                <option value="dark_purple">🟣 Dark Purple</option>
+                <option value="light_red">❤️ Light Red</option>
+                <option value="dark_red">🔴 Dark Red</option>
+            </select>
+            
+            <label>✏️ Font Color</label>
+            <select id="fontColor">
+                <option value="black">⚫ Black</option>
+                <option value="white">⚪ White</option>
+                <option value="blue">🔵 Blue</option>
+                <option value="red">🔴 Red</option>
+                <option value="green">🟢 Green</option>
+                <option value="purple">🟣 Purple</option>
+                <option value="orange">🟠 Orange</option>
+                <option value="gray">◻️ Gray</option>
+            </select>
+            
+            <label>📝 Font Style</label>
+            <select id="fontStyle">
+                <option value="Arial">Arial</option>
+                <option value="Calibri">Calibri</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Impact">Impact</option>
+                <option value="Segoe UI">Segoe UI</option>
+            </select>
+            
+            <div class="button-group">
                 <button class="btn-secondary" onclick="goToPage2()">← Back</button>
+                <button class="btn-primary" onclick="goToPage4()">Continue →</button>
+            </div>
+        </div>
+        
+        <!-- PAGE 4: Add/Edit Slides (Up to 15) -->
+        <div id="page4" class="page">
+            <div class="progress">
+                <div class="step active">1</div><div class="step-line"></div>
+                <div class="step active">2</div><div class="step-line"></div>
+                <div class="step active">3</div>
+            </div>
+            <h2>📝 Create Your Slides (Max 15)</h2>
+            <div class="slide-count" id="slideCount">Slides: 1 / 15</div>
+            <div class="scroll-area" id="slidesContainer"></div>
+            <div class="button-group">
+                <button class="btn-secondary" onclick="goToPage3()">← Back</button>
                 <button class="btn-primary" onclick="generatePPT()">Generate PPT →</button>
             </div>
         </div>
         
-        <!-- PAGE 4: Result -->
-        <div id="page4" class="page">
+        <!-- PAGE 5: Generating & Result -->
+        <div id="page5" class="page">
             <div class="progress">
                 <div class="step active">1</div><div class="step-line"></div>
                 <div class="step active">2</div><div class="step-line"></div>
@@ -309,7 +382,7 @@
             <div id="loading" class="loader">
                 <div class="spinner"></div>
                 <h3>🐰 Creating Your Professional Presentation... 🥕</h3>
-                <p>Adding Roadmap, Mind Map, Features, and Comparison templates</p>
+                <p>Please wait while we generate your PPT</p>
             </div>
             <div id="result" style="display: none;" class="success">
                 <div class="checkmark">🎉✨🌟</div>
@@ -325,57 +398,59 @@
         // Create falling items
         function createFallingItems() {
             const container = document.getElementById('fallingContainer');
-            const items = ['🥕', '🥕', '🐰', '✨', '🌟', '💼', '📊', '🎨','❤️'];
-            for (let i = 0; i < 100; i++) {
+            const items = ['🥕', '🥕', '🐰', '✨', '🌟', '💼', '📊', '🎨', '❤️'];
+            for (let i = 0; i < 150; i++) {
                 const item = document.createElement('div');
                 item.className = 'falling-item';
                 item.innerHTML = items[Math.floor(Math.random() * items.length)];
                 item.style.left = Math.random() * 100 + '%';
-                item.style.animationDuration = Math.random() * 4 + 3 + 's';
-                item.style.animationDelay = Math.random() * 5 + 's';
+                item.style.animationDuration = Math.random() * 4 + 2 + 's';
+                item.style.animationDelay = Math.random() * 8 + 's';
                 item.style.fontSize = Math.random() * 25 + 20 + 'px';
                 container.appendChild(item);
             }
         }
-        createFallingItems();
+        
+        // Call createFallingItems when page loads
+        window.onload = function() {
+            createFallingItems();
+        };
         
         let currentStyle = 'corporate';
         let slidesData = [];
         
-        // Initialize 1 slide
         function initSlides() {
-            slidesData = [{ title: "Introduction", content: ["Welcome to my presentation", "Key topics to be covered", "What you will learn"] }];
+            slidesData = [
+                { title: "Introduction", content: ["Welcome to my presentation", "Key topics to be covered", "What you will learn"] }
+            ];
             renderSlides();
         }
         
         function renderSlides() {
             const container = document.getElementById('slidesContainer');
+            if (!container) return;
             container.innerHTML = '';
+            
             for (let i = 0; i < slidesData.length; i++) {
                 const slideDiv = document.createElement('div');
                 slideDiv.className = 'slide-editor';
                 slideDiv.innerHTML = `
-                    <div class="slide-title">📄 Slide ${i+1}: 
-                        <input type="text" id="slide_title_${i}" value="${slidesData[i].title}" style="width: 70%; display: inline-block; margin-left: 10px;">
-                        ${slidesData.length > 1 ? `<button onclick="removeSlide(${i})" style="float: right; background: #ff4444; color: white; padding: 5px 10px; font-size: 12px; border-radius: 10px;">✗ Remove</button>` : ''}
+                    <div>
+                        <input type="text" class="slide-title-input" id="slide_title_${i}" value="${slidesData[i].title.replace(/"/g, '&quot;')}" placeholder="Slide Title">
+                        ${slidesData.length > 1 ? `<button class="remove-btn" onclick="removeSlide(${i})">✗ Remove</button>` : ''}
                     </div>
-                    <textarea class="slide-content" id="slide_content_${i}" rows="4" placeholder="Enter bullet points (one per line)">${slidesData[i].content.join('\n')}</textarea>
+                    <textarea class="slide-content-text" id="slide_content_${i}" rows="4" placeholder="Enter bullet points (one per line)">${slidesData[i].content.join('\n')}</textarea>
                 `;
                 container.appendChild(slideDiv);
             }
-            document.getElementById('slideCount').innerHTML = `Slides: ${slidesData.length} / 15`;
+            
+            const slideCount = document.getElementById('slideCount');
+            if (slideCount) slideCount.innerHTML = `Slides: ${slidesData.length} / 15`;
             
             if (slidesData.length < 15) {
                 const addBtn = document.createElement('button');
                 addBtn.innerHTML = '+ Add New Slide';
-                addBtn.style.width = '100%';
-                addBtn.style.padding = '12px';
-                addBtn.style.marginTop = '10px';
-                addBtn.style.background = '#000';
-                addBtn.style.color = 'white';
-                addBtn.style.border = 'none';
-                addBtn.style.borderRadius = '10px';
-                addBtn.style.cursor = 'pointer';
+                addBtn.className = 'add-btn';
                 addBtn.onclick = () => addSlide();
                 container.appendChild(addBtn);
             }
@@ -400,8 +475,10 @@
                 const titleInput = document.getElementById(`slide_title_${i}`);
                 const contentText = document.getElementById(`slide_content_${i}`);
                 if (titleInput) slidesData[i].title = titleInput.value;
-                if (contentText) slidesData[i].content = contentText.value.split('\n').filter(line => line.trim().length > 0);
-                if (slidesData[i].content.length === 0) slidesData[i].content = ["Sample content"];
+                if (contentText) {
+                    slidesData[i].content = contentText.value.split('\n').filter(line => line.trim().length > 0);
+                }
+                if (slidesData[i].content.length === 0) slidesData[i].content = ["No content"];
             }
         }
         
@@ -424,24 +501,34 @@
         }
         
         function goToPage3() {
-            saveSlides();
-            if (slidesData.length === 0) { alert('Please add at least one slide!'); return; }
+            const creator = document.getElementById('creatorName').value.trim();
+            if (!creator) { alert('🐰 Please enter your name! 🥕'); return; }
             document.getElementById('page2').classList.remove('active');
             document.getElementById('page3').classList.add('active');
         }
         
-        function goToPage2From3() {
+        function goToPage4() {
             document.getElementById('page3').classList.remove('active');
-            document.getElementById('page2').classList.add('active');
+            document.getElementById('page4').classList.add('active');
+            initSlides();
         }
         
         async function generatePPT() {
             saveSlides();
-            const title = document.getElementById('pptTitle').value.trim();
-            const creator = document.getElementById('creatorName').value.trim() || "B. MARLIYA BANU";
             
-            document.getElementById('page3').classList.remove('active');
-            document.getElementById('page4').classList.add('active');
+            const title = document.getElementById('pptTitle').value.trim();
+            const creator = document.getElementById('creatorName').value.trim();
+            const bgColor = document.getElementById('bgColor').value;
+            const fontColor = document.getElementById('fontColor').value;
+            const fontStyle = document.getElementById('fontStyle').value;
+            
+            if (slidesData.length === 0) {
+                alert('Please add at least one slide!');
+                return;
+            }
+            
+            document.getElementById('page4').classList.remove('active');
+            document.getElementById('page5').classList.add('active');
             document.getElementById('loading').style.display = 'block';
             document.getElementById('result').style.display = 'none';
             
@@ -452,20 +539,26 @@
                     body: JSON.stringify({
                         title: title,
                         creator_name: creator,
-                        style: currentStyle,
-                        slides_content: slidesData
+                        slides_content: slidesData,
+                        background_color: bgColor,
+                        font_color: fontColor,
+                        font_style: fontStyle
                     })
                 });
+                
                 const data = await response.json();
+                
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('result').style.display = 'block';
                 document.getElementById('info').innerHTML = `
                     <strong>📖 Title:</strong> ${title}<br>
                     <strong>👤 Creator:</strong> ${creator}<br>
                     <strong>📊 Slides:</strong> ${slidesData.length + 1}<br>
-                    <strong>🎨 Theme:</strong> ${currentStyle}<br>
+                    <strong>🎨 Background:</strong> ${bgColor.replace('_', ' ')}<br>
+                    <strong>✏️ Font:</strong> ${fontColor} / ${fontStyle}<br>
                     <strong>⏰ Created:</strong> ${new Date().toLocaleString()}
                 `;
+                
                 window.downloadUrl = data.download_url;
             } catch (error) {
                 alert('Error: ' + error.message);
@@ -474,22 +567,26 @@
         }
         
         function downloadPPT() {
-            if (window.downloadUrl) window.open(window.downloadUrl, '_blank');
+            if (window.downloadUrl) {
+                window.open(window.downloadUrl, '_blank');
+            } else {
+                alert('Download URL not found. Please generate again!');
+            }
         }
         
         function resetApp() {
             document.getElementById('pptTitle').value = '';
             document.getElementById('creatorName').value = 'B. MARLIYA BANU';
-            document.getElementById('page4').classList.remove('active');
+            document.getElementById('bgColor').value = 'white';
+            document.getElementById('fontColor').value = 'black';
+            document.getElementById('fontStyle').value = 'Arial';
+            document.getElementById('page5').classList.remove('active');
             document.getElementById('page1').classList.add('active');
-            initSlides();
+            slidesData = [];
             window.downloadUrl = '';
         }
         
-        // Initialize
-        initSlides();
-        
-        // Shake animation for continue buttons
+        // Shake animation for continue button
         const nextBtn1 = document.getElementById('nextBtn1');
         if (nextBtn1) {
             setInterval(() => {
